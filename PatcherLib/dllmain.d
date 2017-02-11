@@ -7,6 +7,9 @@ import core.stdc.string;
 import std.algorithm;
 import std.exception;
 import std.file;
+import std.digest.md;
+import std.parallelism;
+import std.range;
 import std.stdio;
 import std.string;
 
@@ -90,3 +93,36 @@ export extern (C) void GetFileList(const char* directory, int fileCount, int* fi
 	}
 }
 
+alias char md5string[32 + 1];
+export extern (C) void GetMd5OfFile(const char* fileName, md5string* md5)
+{
+	try
+	{
+		memcpy(cast(void*)md5, toStringz(toHexString(md5Of(read(fromStringz(fileName))))), 32+1);
+	}
+	catch(Exception ex)
+	{
+		throw new Exception(format("Error: %s", ex.msg));
+	}
+}
+
+export extern (C) void GetMd5List(char** fileList, int fileCount, md5string* md5List, uint maxThreads)
+{
+	try
+	{
+		if(maxThreads == 0)
+			maxThreads = totalCPUs;
+
+		auto pool = new TaskPool(maxThreads);
+
+		foreach(int i; pool.parallel(iota(0,fileCount), 10))
+			GetMd5OfFile(fileList[i], &md5List[i]);
+
+		pool.finish(true);
+
+	}
+	catch(Exception ex)
+	{
+		log("Error: %s", ex.msg);
+	}
+}
