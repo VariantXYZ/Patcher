@@ -93,12 +93,31 @@ export extern (C) void GetFileList(const char* directory, int fileCount, int* fi
 	}
 }
 
+// SF94 did it
+ubyte[] HashFile(HashType)(in char* path) if (isDigest!HashType)
+{
+    HashType hash; 
+	hash.start();
+
+    File file = File(fromStringz(path), "rb");
+
+    if (!file.isOpen)
+        return null;
+
+    foreach (ubyte[] buffer; file.byChunk(4 * 1024))
+        hash.put(buffer);
+
+    file.close();
+
+    return hash.finish().dup;
+}
+
 alias char md5string[32 + 1];
 export extern (C) void GetMd5OfFile(const char* fileName, md5string* md5)
 {
 	try
 	{
-		memcpy(cast(void*)md5, toStringz(toHexString(md5Of(read(fromStringz(fileName))))), 32+1);
+		memcpy(cast(void*)md5, toStringz(toHexString(HashFile!MD5(fileName))), md5string.sizeof);
 	}
 	catch(Exception ex)
 	{
@@ -115,11 +134,10 @@ export extern (C) void GetMd5List(char** fileList, int fileCount, md5string* md5
 
 		auto pool = new TaskPool(maxThreads);
 
-		foreach(int i; pool.parallel(iota(0,fileCount), 10))
+		foreach(int i; pool.parallel(iota(0,fileCount-1)))
 			GetMd5OfFile(fileList[i], &md5List[i]);
 
 		pool.finish(true);
-
 	}
 	catch(Exception ex)
 	{
