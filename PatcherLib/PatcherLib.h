@@ -20,7 +20,12 @@ extern "C" {
 
 	// Given a list of files, populate their 32 character MD5s in a pre-allocated array
 	// Attempts to do in parallel, if maxThreads is set to 0, will use as many threads as available on the CPU
+	// NOTE: On a hard disk, it's probably faster to set the thread count to 1
 	void GetMd5List(char** fileList, int fileCount, md5string* md5List, unsigned int maxThreads);
+
+	void DownloadFile(const char* uri, const char* dest, const char* userAgent);
+
+	void DownloadFiles(const char** uriList, const char** destList, int uriCount, const char* userAgent, unsigned int maxThreads);
 
 #ifdef __cplusplus
 }

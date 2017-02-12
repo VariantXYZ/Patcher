@@ -76,7 +76,7 @@ namespace PatcherTest
 				fileList[i] = (char*)malloc(fileListLengths[i]);
 			GetFileList(dir, count, fileListLengths, fileList);
 			md5string* md5Strings = (md5string*)malloc(sizeof(md5string)*count);
-			GetMd5List(fileList, count, md5Strings, 1);
+			GetMd5List(fileList, count, md5Strings, 0);
 
 			free(md5Strings);
 			for (int i = 0; i < count; i++)
