@@ -1,0 +1,33 @@
+<html><head><META HTTP-EQUIV="Content-Type" content="text/html">
+</head><body><pre>
+<table width=100% bgcolor=#CFCFE5><tr><td>
+	<font face=arial size=+3>Build Log</font>
+</table>
+<table width=100% bgcolor=#DFDFE5><tr><td><font face=arial size=+2>
+Building Debug LDC Win32\PatcherLibTestD.exe
+</font></table>
+<table width=100% bgcolor=#EFEFE5><tr><td><font face=arial size=+1>
+Command Line
+</font></table>
+copy /Y ..\PatcherLib\Debug\PatcherLib.dll .
+if errorlevel 1 goto reportError
+set PATH=C:\DLang\ldc2-1.1.0-beta6-win64-msvc\\bin;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\\bin;C:\Program Files (x86)\Microsoft Visual Studio 14.0\\Common7\IDE;C:\Program Files (x86)\Windows Kits\8.1\\bin;%PATH%
+set LIB=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\\lib;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\ucrt\x86;C:\Program Files (x86)\Windows Kits\8.1\Lib\winv6.3\um\x86;..\PatcherLib\Debug\
+set WindowsSdkDir=C:\Program Files (x86)\Windows Kits\8.1\
+set VCINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\
+set VSINSTALLDIR=C:\Program Files (x86)\Microsoft Visual Studio 14.0\
+&quot;C:\Program Files (x86)\VisualD\pipedmd.exe&quot; ldc2 -m32 -gc -O -d-debug -X -Xf=&quot;Debug LDC Win32\PatcherLibTestD.json&quot; -I=..\PatcherLib -deps=&quot;Debug LDC Win32\PatcherLibTestD.dep&quot; -of=&quot;Debug LDC Win32\PatcherLibTestD.exe&quot; -L/MAP:&quot;Debug LDC Win32\PatcherLibTestD.map&quot; PatcherLib.lib main.d -betterC -g 
+if errorlevel 1 goto reportError
+if not exist &quot;Debug LDC Win32\PatcherLibTestD.exe&quot; (echo &quot;Debug LDC Win32\PatcherLibTestD.exe&quot; not created! &amp;&amp; goto reportError)
+
+goto noError
+
+:reportError
+echo Building Debug LDC Win32\PatcherLibTestD.exe failed!
+
+:noError
+<table width=100% bgcolor=#EFEFE5><tr><td><font face=arial size=+1>
+Output
+</font></table>
+1 file(s) copied.
+</body></html>
