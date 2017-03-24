@@ -91,7 +91,10 @@ namespace Patcher
             Stopwatch stopWatch = new Stopwatch();
             char[,] md5List = new char[fileCount, 32 + 1];
             stopWatch.Start();
-            GetMd5List(fileList, fileCount, md5List, 0);
+            if(args.Count() > 1)
+                GetMd5List(fileList, fileCount, md5List, Convert.ToUInt32(args[1]));
+            else
+                GetMd5List(fileList, fileCount, md5List, 0);
             stopWatch.Stop();
 
             for (int i = 0; i < md5List.GetLength(0); i++)
