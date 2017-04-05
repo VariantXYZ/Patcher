@@ -72,7 +72,7 @@ ubyte[] HashFile(HashType)(in char* path) if (isDigest!HashType)
     if (!file.isOpen)
         return null;
 
-    foreach (ubyte[] buffer; file.byChunk(4 * 1024))
+    foreach (ubyte[] buffer; file.byChunk(0x8000))
         hash.put(buffer);
 
     file.close();
@@ -80,7 +80,7 @@ ubyte[] HashFile(HashType)(in char* path) if (isDigest!HashType)
     return hash.finish().dup;
 }
 
-alias char md5string[32 + 1];
+alias char[32 + 1] md5string;
 export extern (C) void GetMd5OfFile(const char* fileName, md5string* md5)
 {
 	try
